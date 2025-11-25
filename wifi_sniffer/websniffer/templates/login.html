@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetSniff - Login</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <h1>NetSniff</h1>
+        <div class="login-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" id="login-button">Login</button>
+            <div id="login-error" class="error-message"></div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('login-button').addEventListener('click', async () => {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    window.location.href = '/';
+                } else {
+                    document.getElementById('login-error').textContent = data.error || 'Login failed';
+                }
+            } catch (error) {
+                document.getElementById('login-error').textContent = 'An error occurred';
+            }
+        });
+    </script>
+</body>
+</html> 

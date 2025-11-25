@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Sniffer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">NetSniff</div>
+            <nav>
+                <button class="nav-item active" data-view="dashboard">Dashboard</button>
+                <button class="nav-item" data-view="capture">Packet Capture</button>
+                <button class="nav-item" data-view="alerts">Alerts</button>
+                <button class="nav-item" data-view="analysis">Analysis</button>
+                <button class="nav-item" data-view="reports">Reports</button>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Control Bar -->
+            <div class="control-bar">
+                <div class="status-container">
+                    <span id="statusIndicator" class="status-indicator disconnected">Disconnected</span>
+                </div>
+                <div class="filter-container">
+                    <input type="text" id="filterInput" placeholder="Enter filter (e.g., tcp port 80)">
+                    <button id="applyFilter">Apply Filter</button>
+                </div>
+                <div class="capture-controls">
+                    <button id="startCapture" class="btn primary">Start Capture</button>
+                    <button id="stopCapture" class="btn danger" disabled>Stop Capture</button>
+                    <button id="saveCapture" class="btn secondary">Save Capture</button>
+                </div>
+            </div>
+
+            <!-- Views -->
+            <div class="views">
+                <!-- Dashboard View -->
+                <div id="dashboardView" class="view active">
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <h3>Packets Captured</h3>
+                            <div id="stats">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Active Connections</h3>
+                            <div id="connections">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Alerts</h3>
+                            <div id="alertCount">0</div>
+                        </div>
+                    </div>
+                    <div class="charts-container">
+                        <div class="chart-card">
+                            <div id="packet-rate-chart"></div>
+                        </div>
+                        <div class="chart-card">
+                            <div id="protocol-chart"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Packet Capture View -->
+                <div id="captureView" class="view">
+                    <div class="packet-table-container">
+                        <table id="packetTable" class="packet-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Source</th>
+                                    <th>Destination</th>
+                                    <th>Protocol</th>
+                                    <th>Length</th>
+                                    <th>Info</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Alerts View -->
+                <div id="alertsView" class="view">
+                    <div class="alerts-container">
+                        <div id="alertsList"></div>
+                    </div>
+                </div>
+
+                <!-- Analysis View -->
+                <div id="analysisView" class="view">
+                    <div class="analysis-container">
+                        <div class="analysis-card">
+                            <h3>Top Talkers</h3>
+                            <div id="topTalkers"></div>
+                        </div>
+                        <div class="analysis-card">
+                            <h3>Protocol Analysis</h3>
+                            <div id="protocolAnalysis"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports View -->
+                <div id="reportsView" class="view">
+                    <div class="reports-container">
+                        <div class="reports-list">
+                            <h3>Saved Captures</h3>
+                            <div id="capturesList"></div>
+                        </div>
+                        <div class="report-actions">
+                            <button id="generateReport" class="btn primary">Generate Report</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Debug Container -->
+            <div id="debugContainer" class="debug-container"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
